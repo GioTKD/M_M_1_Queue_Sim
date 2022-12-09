@@ -24,6 +24,7 @@ wait_t = []
 queue_c = []
 utilization = []
 val_utilization = 0
+exp_queue_len = 0
 class Simulation:
     def __init__(self):
         self.queue_len = 0
@@ -45,7 +46,8 @@ class Simulation:
         self.total_wait += self.queue_len*(time_event-self.clock) # update total wait by consider total number customers in a system * the time that passed (which is t_event - clock)
         #t_event-clock give me the step time until the duration from the last time step until the next event that's currently being processed
         self.clock = time_event # update the clock to the current event
-        utilization.append(time_event)
+
+        utilization.append(self.total_wait)
 
         if self.time_arrival <=self.time_depart: # if arrival event happens first (arrival time less than departure time)
             self.handle_arrival_event()
@@ -81,10 +83,16 @@ s = Simulation()
 for i in range(10):
     queue_c.append(s.queue_len)
     s.inc_time()
-print(queue_c)
-val_utilization = utilization[9]-utilization[0]
-print(val_utilization)
-print(wait_t)
+
+val_utilization = utilization[i]-utilization[0]
+exp_queue_len = (1/val_utilization)*(sum(i*utilization)+(sum((i+1)*utilization)))
+print("Queue costumers :",queue_c)
+print("Tn :",val_utilization)
+print("Waiting time :",wait_t)
+print("Expect Queue Len : ",exp_queue_len)
+#need to do last operation to compute everything
+
+
 #plt.hist(wait_t)
 #plt.xlabel('Waiting Time')
 #plt.ylabel('Customers')
