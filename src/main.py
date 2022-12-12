@@ -42,7 +42,7 @@ class Simulation:
         self.total_wait = 0.0
 
     def inc_time(self):
-        time_event = min(self.time_arrival,self.time_depart) # time the next event happens
+        time_event = min(self.time_arrival,self.time_depart) # time that passed compute by take the minimum value between the next arrival or next departure
         self.total_wait += self.queue_len*(time_event-self.clock) # update total wait by consider total number customers in a system * the time that passed (which is t_event - clock)
         #t_event-clock give me the step time until the duration from the last time step until the next event that's currently being processed
         self.clock = time_event # update the clock to the current event
@@ -83,12 +83,22 @@ s = Simulation()
 for i in range(10):
     queue_c.append(s.queue_len)
     s.inc_time()
+to = utilization[0]
+tf = utilization[9]
+val_utilization = 1-(to/tf)
 
-val_utilization = utilization[i]-utilization[0]
-exp_queue_len = (1/val_utilization)*(sum(i*utilization)+(sum((i+1)*utilization)))
+#exp_queue_len = (1/val_utilization)*(sum(i*utilization)+(sum((i+1)*utilization)))
+
+exp_wait_time=(sum(wait_t)/len(wait_t))
+#EXP QUEUE
 print("Queue costumers :",queue_c)
-print("Tn :",val_utilization)
-print("Waiting time :",wait_t)
+
+#UTILIZATION
+print("Val Utilization :",val_utilization)
+#EXP WAITING TIME
+print("Expected waiting Time",exp_wait_time)
+
+#EXP QUEUE LEN
 print("Expect Queue Len : ",exp_queue_len)
 #need to do last operation to compute everything
 
